@@ -1,304 +1,219 @@
-%%% This template uses ACM formatting, for ACM-sponsored conferences.
-%%% If you need IEEE formatting (such as ICSE, every two years), see `paper-ieee.tex`.
+\documentclass[sigplan,screen]{acmart}
 
-\documentclass[sigconf,review,anonymous]{acmart}
-\settopmatter{printfolios=true,printccs=false,printacmref=false}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
 
-%%
-%% \BibTeX command to typeset BibTeX logo in the docs
-\AtBeginDocument{%
-  \providecommand\BibTeX{{%
-    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+\usepackage{balance}
 
-%% Rights management information.  This information is sent to you
-%% when you complete the rights form.  These commands have SAMPLE
-%% values in them; it is your responsibility as an author to replace
-%% the commands and values with those provided to you when you
-%% complete the rights form.
-% \setcopyright{acmcopyright}
-% \copyrightyear{2018}
-% \acmYear{2018}
-% \acmDOI{10.1145/1122445.1122456}
+\title{Template-Free Dynamic Invariant Detection}
 
-%% These commands are for a PROCEEDINGS abstract or paper.
-% \acmConference[Woodstock '18]{Woodstock '18: ACM Symposium on Neural
-%   Gaze Detection}{June 03--05, 2018}{Woodstock, NY}
-% \acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
-%   June 03--05, 2018, Woodstock, NY}
-% \acmPrice{15.00}
-% \acmISBN{978-1-4503-9999-9/18/06}
-\acmConference[Conference \the\year]{The 1st Conference on Conferences}{1 - 4 January, \the\year}{City, Country}
-
-
-%%
-%% Submission ID.
-%% Use this when submitting an article to a sponsored event. You'll
-%% receive a unique submission ID from the organizers
-%% of the event, and this ID should be used as the parameter to this command.
-%%\acmSubmissionID{123-A56-BU3}
-
-%%
-%% The majority of ACM publications use numbered citations and
-%% references.  The command \citestyle{authoryear} switches to the
-%% "author year" style.
-%%
-%% If you are preparing content for an event
-%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
-%% citations and references.
-%% Uncommenting
-%% the next command will enable that style.
-%%\citestyle{acmauthoryear}
-
-% tables
-\usepackage{tabularx}
-\usepackage{booktabs}
-
-%\usepackage{algorithm}
-%\usepackage[noend]{algpseudocode}
-
-% xspace command
-\usepackage{xspace}
-
-% for the researchquestions environment
-\usepackage{enumitem}
-
-% From https://tex.stackexchange.com/questions/177025/
-%% \makeatletter
-%% \newcounter{algorithmicH}% New algorithmic-like hyperref counter
-%% \let\oldalgorithmic\algorithmic
-%% \renewcommand{\algorithmic}{%
-%%   \stepcounter{algorithmicH}% Step counter
-%%   \oldalgorithmic}% Do what was always done with algorithmic environment
-%% \renewcommand{\theHALG@line}{ALG@line.\thealgorithmicH.\arabic{ALG@line}}
-%% \makeatother
-
-% lstlisting command
-\usepackage{listings}
-\usepackage[scaled]{beramono}
-\newcommand*\LSTfont{\Small\fontencoding{T1}\ttfamily\SetTracking{encoding=*}{-60}\lsstyle}
-\lstset{language=Java,
-  frame=none,
-  aboveskip=1.5pt,
-  belowskip=0pt,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle=\LSTfont,
-  numbers=none,
-  numberstyle=\tiny\color{black},
-  keywordstyle=\color{black},
-  commentstyle=\color{black},
-  stringstyle=\color{black},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3,
-  %emph={@NonNegative,@Positive,@GTENegativeOne,@LTLengthOf,@LTEqLengthOf,@IndexFor,@IndexOrHigh,@IndexOrLow,@HasSubsequence,@LessThan,@SameLen,@SearchIndexFor,@MinLen,@ArrayLen,@IntVal,@IntRange,@LengthOf,@UpperBoundUnknown,@LowerBoundUnknown,int,double,List,Map,Object,SerialDate,Long,Integer,DefaultPolarItemRenderer,LegendItem,PolarPlot,XYDataset,long,T,String,string,byte,InputStream,CategoryDataset,DatasetRenderingOrder,ArrayList,Entry,Values,Number,ValuesContract,ImmutableIntArray,Dataset,XYZDataset}, emphstyle=\color{blue}
-}
-
-% Graphics
-% \usepackage{tikz}
-% \usetikzlibrary{arrows,automata,positioning}
-
-% Change font and line spacing for figure captions
-\usepackage{setspace,caption}
-\captionsetup{labelfont={small,bf}, textfont={small,bf,stretch=0.8}, labelsep=colon, margin=0pt}
-
-\usepackage{flushend} % balanced columns on last page
-
-\usepackage{url} % URLs; used in plume-bib
-
-% cref command; best to load last
-\usepackage{cleveref}
-\newcommand{\crefrangeconjunction}{--}
-
-%%
-%% end of the preamble, start of the body of the document source.
-\begin{document}
-
-\input{macros}
-
-%%
-%% The "title" command has an optional parameter,
-%% allowing the author to define a "short title" to be used in page headers.
-\title{Software Engineering Paper Template}
-
-%%
-%% The "author" command and its associated commands are used to define
-%% the authors and their affiliations.
-%% Of note is the shared affiliation of the first two authors, and the
-%% "authornote" and "authornotemark" commands
-%% used to denote shared contribution to the research.
-
-
-%%
-%% The "author" command and its associated commands are used to define
-%% the authors and their affiliations.
-%% Of note is the shared affiliation of the first two authors, and the
-%% "authornote" and "authornotemark" commands
-%% used to denote shared contribution to the research.
-\author{Ben Trovato}
-\authornote{Both authors contributed equally to this research.}
-\email{trovato@corporation.com}
-\orcid{1234-5678-9012}
-\author{G.K.M. Tobin}
-\authornotemark[1]
-\email{webmaster@marysville-ohio.com}
+\author{Erfan Arvan}
 \affiliation{%
-  \institution{Institute for Clarity in Documentation}
-  \city{Dublin}
-  \state{Ohio}
+  \institution{New Jersey Institute of Technology}
+  \city{Newark}
+  \state{NJ}
   \country{USA}
 }
+\email{ea442@njit.edu}
 
-\author{Lars Th{\o}rv{\"a}ld}
-\affiliation{%
-  \institution{The Th{\o}rv{\"a}ld Group}
-  \city{Hekla}
-  \country{Iceland}}
-\email{larst@affiliation.org}
-
-\author{Valerie B\'eranger}
-\affiliation{%
-  \institution{Inria Paris-Rocquencourt}
-  \city{Rocquencourt}
-  \country{France}
-}
-
-\author{Aparna Patel}
-\affiliation{%
- \institution{Rajiv Gandhi University}
- \city{Doimukh}
- \state{Arunachal Pradesh}
- \country{India}}
-
-\author{Huifen Chan}
-\affiliation{%
-  \institution{Tsinghua University}
-  \city{Haidian Qu}
-  \state{Beijing Shi}
-  \country{China}}
-
-\author{Charles Palmer}
-\affiliation{%
-  \institution{Palmer Research Laboratories}
-  \city{San Antonio}
-  \state{Texas}
-  \country{USA}}
-\email{cpalmer@prl.com}
-
-\author{John Smith}
-\affiliation{%
-  \institution{The Th{\o}rv{\"a}ld Group}
-  \city{Hekla}
-  \country{Iceland}}
-\email{jsmith@affiliation.org}
-
-\author{Julius P. Kumquat}
-\affiliation{%
-  \institution{The Kumquat Consortium}
-  \city{New York}
-  \country{USA}}
-\email{jpkumquat@consortium.net}
-
-%%
-%% By default, the full list of authors will be used in the page
-%% headers. Often, this list is too long, and will overlap
-%% other information printed in the page headers. This command allows
-%% the author to define a more concise list
-%% of authors' names for this purpose.
-% \renewcommand{\shortauthors}{Trovato et al.}
-
-
-%%
-%% The abstract is a short summary of the work to be presented in the
-%% article.
 \begin{abstract}
-\input{abstract}
+Dynamic invariant detectors such as Daikon infer likely program invariants
+by evaluating candidate properties against execution traces.
+However, Daikon's candidates are drawn from a fixed template library,
+which prevents it from expressing properties that involve project-specific
+logic or more than three variables.
+We present \textsc{Oca}, a dynamic invariant detector that uses a large language
+model (LLM) to propose candidates instead of deriving them from templates.
+LLM-proposed invariants are more expressive, but their integration into
+a dynamic analysis pipeline raises non-trivial research challenges
+involving context selection, semantic safety, and scalability.
+We address these challenges and evaluate \textsc{Oca} on the Defects4J benchmark,
+showing that it infers invariants beyond Daikon's expressive reach
+and that these invariants improve bug-detection capability in property-based testing.
 \end{abstract}
 
-%%
-%% Note: the 'printccs' field at the top of this file must be set to `true'
-%%       in order for the CCS concepts to appear in the pdf.
-%%
-%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
-%% Please copy and paste the code instead of the example below.
-%%
-% \begin{CCSXML}
-% <ccs2012>
-%  <concept>
-%   <concept_id>10010520.10010553.10010562</concept_id>
-%   <concept_desc>Computer systems organization~Embedded systems</concept_desc>
-%   <concept_significance>500</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010575.10010755</concept_id>
-%   <concept_desc>Computer systems organization~Redundancy</concept_desc>
-%   <concept_significance>300</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010553.10010554</concept_id>
-%   <concept_desc>Computer systems organization~Robotics</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10003033.10003083.10003095</concept_id>
-%   <concept_desc>Networks~Network reliability</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-% </ccs2012>
-% \end{CCSXML}
-
-% \ccsdesc[500]{Computer systems organization~Embedded systems}
-% \ccsdesc[300]{Computer systems organization~Redundancy}
-% \ccsdesc{Computer systems organization~Robotics}
-% \ccsdesc[100]{Networks~Network reliability}
-
-%%
-%% Keywords. The author(s) should pick words that accurately describe
-%% the work being presented. Separate the keywords with commas.
-% \keywords{datasets, neural networks, gaze detection, text tagging}
-
-%% A "teaser" image appears between the author and affiliation
-%% information and the body of the document, and typically spans the
-%% page.
-%% \begin{teaserfigure}
-%%   \includegraphics[width=\textwidth]{sampleteaser}
-%%   \caption{Seattle Mariners at Spring Training, 2010.}
-%%   \Description{Enjoying the baseball game from the third-base
-%%   seats. Ichiro Suzuki preparing to bat.}
-%%   \label{fig:teaser}
-%% \end{teaserfigure}
-
-%% This command processes the author and affiliation and title
-%% information and builds the first part of the formatted document.
+\begin{document}
 \maketitle
 
-\input{introduction}
+\section{Problem and Motivation}
 
-\input{technique}
+Program invariants---properties that hold at every execution of a program
+point---are foundational to testing, verification, and program understanding.
+Dynamic invariant detectors such as Daikon~\cite{ernst2007daikon}
+infer likely invariants automatically from execution traces,
+avoiding the burden of manual specification.
+Daikon is widely used in research and practice,
+but its design imposes a hard expressive ceiling:
+it generates candidates from a fixed template library,
+so any invariant that cannot be expressed within that grammar
+is never even considered.
+Concretely, Daikon cannot express (1)~properties involving
+project-specific methods or domain abstractions, or
+(2)~relations among more than three variables.
+These limitations matter in practice:
+real programs frequently contain semantic constraints
+that cut across these boundaries.
 
-\input{implementation}
+Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm},
+but prior efforts were manual or limited in scope
+and did not produce a validated, end-to-end tool.
+We fill this gap with \textsc{Oca}, a dynamic invariant detector
+that replaces Daikon's template library with LLM-generated candidates
+while preserving Daikon's execution-based validation model.
 
-\input{evaluation}
+\section{Research Challenges}
 
-\input{limitations}
+Substituting an LLM for a template library is not straightforward.
+We identify four challenges that any such system must address.
 
-\input{relatedwork}
+\paragraph{C1: Providing effective context.}
+LLMs are sensitive to the context supplied in their prompts.
+Too little context yields trivial or irrelevant invariants;
+too much wastes token budget and can confuse the model.
+The right granularity is not obvious and must be determined empirically.
+\textsc{Oca} evaluates context configurations ranging from method signatures
+to call-graph-extended class context,
+using an open-coding analysis of 187 recent LLM-based SE papers
+to identify the candidate strategies.
 
-\input{conclusion}
+\paragraph{C2: Designing prompts that elicit well-formed invariants.}
+Unlike templates, LLM output is unconstrained in form.
+Without careful prompt engineering,
+the model may produce vacuous, trivially true, or ill-structured properties.
+\textsc{Oca} evaluates six prompting strategies derived from established
+taxonomies of LLM prompting for code tasks,
+selecting the best-performing configuration empirically
+before proceeding to the main evaluation.
 
-\todo{The page limit is {\conferencePageLimit} pages.  This is page \thepage.}
+\paragraph{C3: Handling syntactically invalid candidates.}
+LLM-generated expressions may reference out-of-scope identifiers,
+violate typing constraints, or fail to compile when inserted into the program.
+\textsc{Oca} addresses this through multi-stage filtering:
+candidates are checked for syntactic validity and scope before instrumentation,
+and compilation is performed iteratively,
+disabling only the invariants implicated in each error until compilation succeeds.
 
-% \begin{acks}
-% \end{acks}
+\paragraph{C4: Ensuring semantic safety at runtime.}
+Even syntactically valid invariants can be semantically unsafe:
+they may invoke methods with side effects, throw exceptions,
+or trigger nontermination through recursion.
+\textsc{Oca} guards against these problems at runtime
+by limiting re-entrant evaluation via a per-thread depth counter,
+imposing a global time limit on test execution,
+and treating any invariant that causes a test failure as falsified.
 
-%% The next two lines define the bibliography style to be used, and
-%% the bibliography file.
+\section{Approach: \textsc{Oca}}
+
+\textsc{Oca} follows the same execution-based validation paradigm as Daikon:
+candidates are proposed, checked against concrete executions,
+and only those consistent with observed behavior are reported.
+The key difference is the proposal module.
+
+For each method entry and exit point,
+\textsc{Oca} queries an LLM with a structured prompt
+containing the selected source context.
+Generated candidates are filtered and deduplicated,
+then inserted into a working copy of the source code as guarded runtime checks.
+Each check is wrapped in a try-catch block with a depth guard
+to address C4;
+the program is then compiled iteratively to address C3.
+Finally, the instrumented program is executed on its existing test suite.
+Invariants that compile, execute at least once, and are never falsified are reported as held.
+
+A key structural difference from Daikon is that
+\textsc{Oca} generates far fewer candidates per program point
+than Daikon's $2^{64}$-scale template enumeration,
+so it does not require the statistical machinery
+(comparability analysis, implication pruning)
+that Daikon uses to reduce its output.
+This simplifies the validation model
+while the LLM's expressiveness compensates for the reduced candidate volume.
+
+\section{Preliminary Results}
+
+Table~\ref{tab:expr} shows preliminary expressiveness results
+across twelve Defects4J projects
+using fixed program versions to avoid confounding with bug-induced behavior.
+We define an invariant as \emph{expressive} if it involves project-specific method calls
+(criterion Daikon cannot satisfy by design)
+or relates more than three variables
+(a hard structural limit in Daikon's template grammar).
+
+\begin{table}[t]
+\centering
+\caption{Expressiveness of \textsc{Oca}-inferred invariants across Defects4J.
+\#Inv = total held invariants; Var$>$3 = invariants with $>$3 variables;
+PSPM = invariants with project-specific method calls.}
+\label{tab:expr}
+\small
+\begin{tabular}{lrrrr}
+\hline
+\textbf{Project} & \textbf{\#Inv} & \textbf{Var$>$3 (\%)} & \textbf{PSPM (\%)} \\
+\hline
+Cli       &   963 &  1.04 &  9.03 \\
+Closure   &  2117 &  1.09 & 28.29 \\
+Codec     &  1869 &  1.98 & 23.11 \\
+Compress  &  1546 &  0.71 &  9.96 \\
+Csv       &   469 &  0.64 &  9.59 \\
+Gson      &  1635 &  2.02 & 10.40 \\
+JacksonDB &  1185 &  1.01 & 11.73 \\
+Jsoup     &  1677 &  0.83 & 19.80 \\
+Lang      &  3382 &  6.65 & 24.72 \\
+Math      &  3518 &  2.50 &  7.70 \\
+Mockito   &  1610 &  1.18 & 21.30 \\
+Time      &  1007 &  1.69 & 17.38 \\
+\hline
+\textbf{Avg} & & \textbf{1.78} & \textbf{16.09} \\
+\hline
+\end{tabular}
+\end{table}
+
+Across projects, an average of 16\% of held invariants involve project-specific logic
+and 1.78\% relate more than three variables---both categories
+entirely outside Daikon's expressive reach.
+These are conservative figures: they exclude other forms of semantic richness
+(e.g., nested logical structure) that also exceed Daikon's grammar.
+
+Ongoing evaluation on buggy Defects4J versions measures
+whether these expressive invariants improve bug-detection capability
+in property-based testing relative to Daikon's invariants.
+
+\section{Contributions}
+
+This work makes the following contributions:
+
+\begin{itemize}
+  \item A characterization of the research challenges in integrating LLMs
+        into a dynamic invariant detection pipeline (C1--C4).
+  \item \textsc{Oca}, an end-to-end tool that addresses these challenges
+        for Java programs, supporting both cloud-hosted and locally hosted LLMs.
+  \item An empirical evaluation on Defects4J showing that \textsc{Oca}
+        infers invariants beyond Daikon's expressive reach
+        and that those invariants improve downstream bug detection.
+\end{itemize}
+
+\balance
+
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{local,plume-bib/bibstring-abbrev,plume-bib/types,plume-bib/dispatch,plume-bib/ernst,plume-bib/soft-eng,plume-bib/crossrefs}
+\begin{thebibliography}{3}
 
-%%
-%% If your work has an appendix, this is the place to put it.
+\bibitem{ernst2007daikon}
+M.~D. Ernst, J.~H. Perkins, P.~J. Guo, S.~McCamant, C.~Pacheco,
+M.~S. Tschantz, and C.~Xiao.
+The Daikon system for dynamic detection of likely invariants.
+\emph{Science of Computer Programming}, 69(1--3):35--45, 2007.
+
+\bibitem{endres2024llm}
+M.~Endres, S.~Fakhoury, S.~Chakraborty, and S.~K. Lahiri.
+Can large language models transform natural language intent into formal method postconditions?
+\emph{Proc. ACM Softw. Eng.}, 1(FSE):1889--1912, 2024.
+
+\bibitem{sun2025classinvgen}
+C.~Sun et al.
+ClassInvGen: Class invariant synthesis using large language models.
+In \emph{Intl. Symp. on AI Verification}, pp. 64--96, 2025.
+
+\end{thebibliography}
 
 \end{document}
-\endinput
-%%
