@@ -5,6 +5,7 @@
 \pagestyle{plain}
 
 \usepackage{balance}
+\usepackage{url}
 
 \title{Template-Free Dynamic Invariant Detection}
 
@@ -65,43 +66,60 @@ while preserving Daikon's execution-based validation model.
 \section{Research Challenges}
 
 Substituting an LLM for a template library is not straightforward.
-We identify four challenges that any such system must address.
+We identify five challenges that any such system must address.
 
 \paragraph{C1: Providing effective context.}
 LLMs are sensitive to the context supplied in their prompts.
 Too little context yields trivial or irrelevant invariants;
-too much wastes token budget and can confuse the model.
-The right granularity is not obvious and must be determined empirically.
-\textsc{Oca} evaluates context configurations ranging from method signatures
-to call-graph-extended class context,
-using an open-coding analysis of 187 recent LLM-based SE papers
-to identify the candidate strategies.
+too much wastes token budget and can distract the model.
+The right granularity is not obvious and cannot be determined a priori.
+We conducted an open-coding analysis of 187 recent LLM-based SE papers from top venues
+to derive a taxonomy of context strategies used in practice,
+then evaluated each strategy on three real-world Java projects---
+Apache Hudi~\cite{hudi}, libGDX~\cite{libgdx}, and RxJava~\cite{rxjava}---
+to select the configuration that maximizes held invariants.
 
 \paragraph{C2: Designing prompts that elicit well-formed invariants.}
-Unlike templates, LLM output is unconstrained in form.
-Without careful prompt engineering,
-the model may produce vacuous, trivially true, or ill-structured properties.
-\textsc{Oca} evaluates six prompting strategies derived from established
-taxonomies of LLM prompting for code tasks,
-selecting the best-performing configuration empirically
-before proceeding to the main evaluation.
+Without careful prompt design, an LLM may produce vacuous,
+trivially true, or ill-structured properties.
+We derived six candidate strategies from established taxonomies of LLM prompting
+for code tasks---baseline direct prompting, few-shot examples, chain-of-thought,
+stepwise decomposition, self-refinement, and multi-sample agreement---
+and evaluated each on the same three projects~\cite{hudi,libgdx,rxjava},
+fixing the context strategy from C1 throughout.
+Few-shot prompting produced the most held invariants across all three projects
+and was selected as the default configuration.
 
 \paragraph{C3: Handling syntactically invalid candidates.}
-LLM-generated expressions may reference out-of-scope identifiers,
-violate typing constraints, or fail to compile when inserted into the program.
-\textsc{Oca} addresses this through multi-stage filtering:
-candidates are checked for syntactic validity and scope before instrumentation,
-and compilation is performed iteratively,
-disabling only the invariants implicated in each error until compilation succeeds.
+\textsc{Oca} filters candidates at three stages.
+Before injection, a deterministic filter rejects expressions that are trivially true,
+contain bare assignments, reference unknown identifiers,
+use constructs requiring additional imports, apply null comparisons to primitives,
+or fail JavaParser's expression parser.
+After injection, the instrumented project is compiled iteratively:
+begin/end markers localize each failing guard, which is commented out and retried;
+if an error cannot be resolved by removal, the file is restored from the original source.
+After execution, candidates that cause test failures are grouped by method,
+batched, and iteratively disabled until the suite passes,
+identifying the minimal set responsible for failures.
 
-\paragraph{C4: Ensuring semantic safety at runtime.}
-Even syntactically valid invariants can be semantically unsafe:
-they may invoke methods with side effects, throw exceptions,
-or trigger nontermination through recursion.
-\textsc{Oca} guards against these problems at runtime
-by limiting re-entrant evaluation via a per-thread depth counter,
-imposing a global time limit on test execution,
-and treating any invariant that causes a test failure as falsified.
+\paragraph{C4: Preventing invariant checks from corrupting the validation signal.}
+Each injected guard checks a per-thread re-entrancy flag before evaluating its expression.
+If the flag is already set---meaning another check is active on the same thread---the
+guard skips evaluation entirely.
+Without this, evaluating one invariant could call methods with their own injected guards,
+which would execute against artificial inputs and be falsified incorrectly.
+
+\paragraph{C5: Handling non-terminating candidates.}
+\textsc{Oca} detects non-termination per invariant using two mechanisms in a background monitor.
+The first tracks the UUID of whichever invariant is currently mid-evaluation
+via a shared status field and kills the run if that field is unchanged beyond a configurable threshold.
+The second catches deadlocks between invariant calls---where the status field would already
+be clear---by watching for total log silence over the same threshold.
+In both cases, the offending UUID is appended to a persistent exclusion file;
+on the next run, every guard loads this file at JVM startup and skips listed invariants
+across all injection points without source modification.
+A hard wall-clock limit serves as a final safety net.
 
 \section{Approach: \textsc{Oca}}
 
@@ -116,7 +134,7 @@ containing the selected source context.
 Generated candidates are filtered and deduplicated,
 then inserted into a working copy of the source code as guarded runtime checks.
 Each check is wrapped in a try-catch block with a depth guard
-to address C4;
+to address C4 and C5;
 the program is then compiled iteratively to address C3.
 Finally, the instrumented program is executed on its existing test suite.
 Invariants that compile, execute at least once, and are never falsified are reported as held.
@@ -185,7 +203,7 @@ This work makes the following contributions:
 
 \begin{itemize}
   \item A characterization of the research challenges in integrating LLMs
-        into a dynamic invariant detection pipeline (C1--C4).
+        into a dynamic invariant detection pipeline (C1--C5).
   \item \textsc{Oca}, an end-to-end tool that addresses these challenges
         for Java programs, supporting both cloud-hosted and locally hosted LLMs.
   \item An empirical evaluation on Defects4J showing that \textsc{Oca}
@@ -197,6 +215,21 @@ This work makes the following contributions:
 
 \bibliographystyle{ACM-Reference-Format}
 \begin{thebibliography}{3}
+
+\bibitem{hudi}
+Apache Software Foundation.
+Apache Hudi.
+\url{https://github.com/apache/hudi}, 2024.
+
+\bibitem{libgdx}
+libGDX Contributors.
+libGDX.
+\url{https://github.com/libgdx/libgdx}, 2024.
+
+\bibitem{rxjava}
+ReactiveX Contributors.
+RxJava.
+\url{https://github.com/ReactiveX/RxJava}, 2024.
 
 \bibitem{ernst2007daikon}
 M.~D. Ernst, J.~H. Perkins, P.~J. Guo, S.~McCamant, C.~Pacheco,
