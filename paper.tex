@@ -44,7 +44,7 @@ point---are foundational to testing, verification, and program understanding.
 Dynamic invariant detectors such as Daikon~\cite{ernst2007daikon}
 infer likely invariants automatically from execution traces,
 avoiding the burden of manual specification.
-Daikon is widely used in research and practice,
+Daikon is widely used in research and practice\todo{cite at least 3 papers that use it as a baseline; more here is better},
 but its design imposes a hard expressive ceiling:
 it generates candidates from a fixed template library,
 so any invariant that cannot be expressed within that grammar
@@ -55,6 +55,11 @@ project-specific methods or domain abstractions, or
 These limitations matter in practice:
 real programs frequently contain semantic constraints
 that cut across these boundaries.
+\todo{Mention the line of work on extending Daikon with new templates
+  (e.g., \url{https://dl.acm.org/doi/epdf/10.1145/3314221.3314634} or \url{https://dl.acm.org/doi/epdf/10.1145/3468264.3468533})
+  and that these don't really solve the expressiveness problem \emph{in general} because Daikon scales with the number of templates,
+  so just ``add more templates'' is not actually a good solution.
+}
 
 Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm},
 but prior efforts were manual or limited in scope
@@ -67,6 +72,12 @@ while preserving Daikon's execution-based validation model.
 
 Substituting an LLM for a template library is not straightforward.
 We identify five challenges that any such system must address.
+\todo{A few sentences here about the overall themes would help prevent the reader from
+  getting lost. The two big themes are ``it's hard to figure out how to get the LLM to
+  give us useful invariants, because LLMs produce foolish answers by default'' (C1, C2)
+  and ``LLM-generated invariants can be poorly behaved, unlike manually-chosen pure templates''
+  (C3, C4, C5). I think the latter especially is important to mention early, because that's
+  the key theoretical problem that we have to solve.}
 
 \paragraph{C1: Providing effective context.}
 LLMs are sensitive to the context supplied in their prompts.
@@ -132,7 +143,7 @@ For each method entry and exit point,
 \textsc{Oca} queries an LLM with a structured prompt
 containing the selected source context.
 Generated candidates are filtered and deduplicated,
-then inserted into a working copy of the source code as guarded runtime checks.
+then inserted into a working copy of the source code as guarded run-time checks.
 Each check is wrapped in a try-catch block with a depth guard
 to address C4 and C5;
 the program is then compiled iteratively to address C3.
@@ -156,13 +167,13 @@ using fixed program versions to avoid confounding with bug-induced behavior.
 We define an invariant as \emph{expressive} if it involves project-specific method calls
 (criterion Daikon cannot satisfy by design)
 or relates more than three variables
-(a hard structural limit in Daikon's template grammar).
+(a hard structural limit in Daikon's template grammar \todo{necessary so that Daikon is still scalable}).
 
 \begin{table}[t]
 \centering
 \caption{Expressiveness of \textsc{Oca}-inferred invariants across Defects4J.
 \#Inv = total held invariants; Var$>$3 = invariants with $>$3 variables;
-PSPM = invariants with project-specific method calls.}
+PSPM = invariants with project-specific method calls.\todo{I think there are too many significant figures in these percentages, for at least some projects.}}
 \label{tab:expr}
 \small
 \begin{tabular}{lrrrr}
