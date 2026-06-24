@@ -37,6 +37,8 @@ and that these invariants improve bug-detection capability in property-based tes
 \begin{document}
 \maketitle
 
+\input{macros}
+
 \section{Problem and Motivation}
 
 Program invariants---properties that hold at every execution of a program
@@ -56,8 +58,8 @@ These limitations matter in practice:
 real programs frequently contain semantic constraints
 that cut across these boundaries.
 \todo{Mention the line of work on extending Daikon with new templates
-  (e.g., \url{https://dl.acm.org/doi/epdf/10.1145/3314221.3314634} or \url{https://dl.acm.org/doi/epdf/10.1145/3468264.3468533})
-  and that these don't really solve the expressiveness problem \emph{in general} because Daikon scales with the number of templates,
+  (e.g.,~\cite{le2019sling} or \cite{lukes2021synthesis}),
+  and that these don't really solve the expressiveness problem in general because Daikon scales with the number of templates,
   so just ``add more templates'' is not actually a good solution.
 }
 
@@ -257,6 +259,16 @@ Can large language models transform natural language intent into formal method p
 C.~Sun et al.
 ClassInvGen: Class invariant synthesis using large language models.
 In \emph{Intl. Symp. on AI Verification}, pp. 64--96, 2025.
+
+\bibitem{le2019sling}
+Ton Chanh Le, Guolong Zheng, and ThanhVu Nguyen. 
+SLING: Using Dynamic Analysis to Infer Program Invariants in Separation Logic.
+In \emph{Proceedings of the 40th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI '19)}, 2019.
+
+\bibitem{lukes2021synthesis}
+Dylan Lukes, John Sarracino, Cora Coleman, Hila Peleg, Sorin Lerner, and Nadia Polikarpova. 
+Synthesis of Web Layouts from Examples.
+In \emph{Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE '21)}, 2021.
 
 \end{thebibliography}
 
