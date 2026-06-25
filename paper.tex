@@ -46,7 +46,7 @@ point---are foundational to testing, verification, and program understanding.
 Dynamic invariant detectors such as Daikon~\cite{ernst2007daikon}
 infer likely invariants automatically from execution traces,
 avoiding the burden of manual specification.
-Daikon is widely used in research and practice\todo{cite at least 3 papers that use it as a baseline; more here is better},
+Daikon is widely used in research and practice~\cite{endres2024llm,sun2025classinvgen,pei2023llm},
 but its design imposes a hard expressive ceiling:
 it generates candidates from a fixed template library,
 so any invariant that cannot be expressed within that grammar
@@ -57,11 +57,10 @@ project-specific methods or domain abstractions, or
 These limitations matter in practice:
 real programs frequently contain semantic constraints
 that cut across these boundaries.
-\todo{Mention the line of work on extending Daikon with new templates
-  (e.g.,~\cite{le2019sling} or \cite{lukes2021synthesis}),
-  and that these don't really solve the expressiveness problem in general because Daikon scales with the number of templates,
-  so just ``add more templates'' is not actually a good solution.
-}
+Prior work has extended Daikon with new template families~\cite{le2019sling},
+but adding templates does not solve the expressiveness problem in general:
+Daikon's runtime cost scales with the number of candidates,
+so template libraries must remain small and fixed.
 
 Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm},
 but prior efforts were manual or limited in scope
@@ -169,33 +168,33 @@ using fixed program versions to avoid confounding with bug-induced behavior.
 We define an invariant as \emph{expressive} if it involves project-specific method calls
 (criterion Daikon cannot satisfy by design)
 or relates more than three variables
-(a hard structural limit in Daikon's template grammar \todo{necessary so that Daikon is still scalable}).
+(a hard structural limit in Daikon's template grammar).
 
 \begin{table}[t]
 \centering
 \caption{Expressiveness of \textsc{Oca}-inferred invariants across Defects4J.
 \#Inv = total held invariants; Var$>$3 = invariants with $>$3 variables;
-PSPM = invariants with project-specific method calls.\todo{I think there are too many significant figures in these percentages, for at least some projects.}}
+PSPM = invariants with project-specific method calls.}
 \label{tab:expr}
 \small
 \begin{tabular}{lrrrr}
 \hline
 \textbf{Project} & \textbf{\#Inv} & \textbf{Var$>$3 (\%)} & \textbf{PSPM (\%)} \\
 \hline
-Cli       &   963 &  1.04 &  9.03 \\
-Closure   &  2117 &  1.09 & 28.29 \\
-Codec     &  1869 &  1.98 & 23.11 \\
-Compress  &  1546 &  0.71 &  9.96 \\
-Csv       &   469 &  0.64 &  9.59 \\
-Gson      &  1635 &  2.02 & 10.40 \\
-JacksonDB &  1185 &  1.01 & 11.73 \\
-Jsoup     &  1677 &  0.83 & 19.80 \\
-Lang      &  3382 &  6.65 & 24.72 \\
-Math      &  3518 &  2.50 &  7.70 \\
-Mockito   &  1610 &  1.18 & 21.30 \\
-Time      &  1007 &  1.69 & 17.38 \\
+Cli       &   963 &  1.0 &  9.0 \\
+Closure   &  2117 &  1.1 & 28.3 \\
+Codec     &  1869 &  2.0 & 23.1 \\
+Compress  &  1546 &  0.7 & 10.0 \\
+Csv       &   469 &  0.6 &  9.6 \\
+Gson      &  1635 &  2.0 & 10.4 \\
+JacksonDB &  1185 &  1.0 & 11.7 \\
+Jsoup     &  1677 &  0.8 & 19.8 \\
+Lang      &  3382 &  6.7 & 24.7 \\
+Math      &  3518 &  2.5 &  7.7 \\
+Mockito   &  1610 &  1.2 & 21.3 \\
+Time      &  1007 &  1.7 & 17.4 \\
 \hline
-\textbf{Avg} & & \textbf{1.78} & \textbf{16.09} \\
+\textbf{Avg} & & \textbf{1.8} & \textbf{16.1} \\
 \hline
 \end{tabular}
 \end{table}
@@ -260,15 +259,15 @@ C.~Sun et al.
 ClassInvGen: Class invariant synthesis using large language models.
 In \emph{Intl. Symp. on AI Verification}, pp. 64--96, 2025.
 
+\bibitem{pei2023llm}
+K.~Pei, D.~Bieber, K.~Shi, C.~Sutton, and P.~Yin.
+Can large language models reason about program invariants?
+In \emph{International Conference on Machine Learning}, pp. 27496--27520, 2023.
+
 \bibitem{le2019sling}
 Ton Chanh Le, Guolong Zheng, and ThanhVu Nguyen. 
 SLING: Using Dynamic Analysis to Infer Program Invariants in Separation Logic.
 In \emph{Proceedings of the 40th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI '19)}, 2019.
-
-\bibitem{lukes2021synthesis}
-Dylan Lukes, John Sarracino, Cora Coleman, Hila Peleg, Sorin Lerner, and Nadia Polikarpova. 
-Synthesis of Web Layouts from Examples.
-In \emph{Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE '21)}, 2021.
 
 \end{thebibliography}
 
