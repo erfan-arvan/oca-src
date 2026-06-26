@@ -42,11 +42,11 @@ and that these invariants improve bug-detection capability in property-based tes
 \section{Problem and Motivation}
 
 Program invariants---properties that hold at every execution of a program
-point---are foundational to testing, verification, and program understanding.
+point---are foundational to testing, verification, and program understanding~\cite{ernst2007daikon}.
 Dynamic invariant detectors such as Daikon~\cite{ernst2007daikon}
 infer likely invariants automatically from execution traces,
 avoiding the burden of manual specification.
-Daikon is widely used in research and practice~\cite{endres2024llm,sun2025classinvgen,pei2023llm},
+Daikon is widely used in research and practice~\cite{endres2024llm,sun2025classinvgen,pei2023llm,cao2025clause2inv,ma2025specgen},
 but its design imposes a hard expressive ceiling:
 it generates candidates from a fixed template library,
 so any invariant that cannot be expressed within that grammar
@@ -62,9 +62,9 @@ but adding templates does not solve the expressiveness problem in general:
 Daikon's runtime cost scales with the number of candidates,
 so template libraries must remain small and fixed.
 
-Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm},
-but prior efforts were manual or limited in scope
-and did not produce a validated, end-to-end tool.
+Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm,pei2023llm,cao2025clause2inv,ma2025specgen,sun2025classinvgen},
+but prior efforts were manual, limited in scope, or restricted to specific invariant classes
+and did not produce a validated, end-to-end tool for method-level pre- and post-conditions.
 We fill this gap with \textsc{Oca}, a dynamic invariant detector
 that replaces Daikon's template library with LLM-generated candidates
 while preserving Daikon's execution-based validation model.
@@ -73,12 +73,14 @@ while preserving Daikon's execution-based validation model.
 
 Substituting an LLM for a template library is not straightforward.
 We identify five challenges that any such system must address.
-\todo{A few sentences here about the overall themes would help prevent the reader from
-  getting lost. The two big themes are ``it's hard to figure out how to get the LLM to
-  give us useful invariants, because LLMs produce foolish answers by default'' (C1, C2)
-  and ``LLM-generated invariants can be poorly behaved, unlike manually-chosen pure templates''
-  (C3, C4, C5). I think the latter especially is important to mention early, because that's
-  the key theoretical problem that we have to solve.}
+The challenges fall into two groups.
+The first concerns eliciting useful output from the LLM:
+without careful choices of context and prompt design,
+models produce vacuous or irrelevant candidates (C1, C2).
+The second, and more fundamental, concerns the fact that LLM-generated invariants
+can be poorly behaved in ways that manually-chosen templates never are---they
+may be syntactically invalid, corrupt the validation signal through side effects,
+or fail to terminate (C3, C4, C5).
 
 \paragraph{C1: Providing effective context.}
 LLMs are sensitive to the context supplied in their prompts.
@@ -223,6 +225,10 @@ This work makes the following contributions:
         and that those invariants improve downstream bug detection.
 \end{itemize}
 
+\begin{acks}
+I thank Martin Kellogg and Michael D. Ernst for advising this research.
+\end{acks}
+
 \balance
 
 \bibliographystyle{ACM-Reference-Format}
@@ -263,6 +269,16 @@ In \emph{Intl. Symp. on AI Verification}, pp. 64--96, 2025.
 K.~Pei, D.~Bieber, K.~Shi, C.~Sutton, and P.~Yin.
 Can large language models reason about program invariants?
 In \emph{International Conference on Machine Learning}, pp. 27496--27520, 2023.
+
+\bibitem{cao2025clause2inv}
+W.~Cao, G.~Wu, T.~Xu, Y.~Yao, H.~Wei, T.~Chen, and X.~Ma.
+Clause2Inv: A generate-combine-check framework for loop invariant inference.
+\emph{Proc. ACM Softw. Eng.}, 2(ISSTA):1009--1030, 2025.
+
+\bibitem{ma2025specgen}
+L.~Ma, S.~Liu, Y.~Li, X.~Xie, and L.~Bu.
+SpecGen: Automated generation of formal program specifications via large language models.
+In \emph{Proc. 47th Intl. Conf. on Software Engineering (ICSE)}, pp. 666, 2025.
 
 \bibitem{le2019sling}
 Ton Chanh Le, Guolong Zheng, and ThanhVu Nguyen. 
