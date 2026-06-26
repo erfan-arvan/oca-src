@@ -46,7 +46,7 @@ point---are foundational to testing, verification, and program understanding~\ci
 Dynamic invariant detectors such as Daikon~\cite{ernst2007daikon}
 infer likely invariants automatically from execution traces,
 avoiding the burden of manual specification.
-Daikon is widely used in research and practice~\cite{endres2024llm,sun2025classinvgen,pei2023llm,cao2025clause2inv,ma2025specgen},\todo{Not all of these use Daikon and a baseline, and in fact this is the same list that you use below of LLM-based invariant generators. Did you mean to copy-paste a different list, maybe? Certainly clause2inv, today's RG paper, does not mention Daikon.}
+Daikon is widely used in research and practice~\cite{endres2024llm,sun2025classinvgen,pei2023llm,cao2025clause2inv,ma2025specgen},\todo{Not all of these use Daikon as a baseline, and in fact this is the same list that you use below of LLM-based invariant generators. Did you mean to copy-paste a different list, maybe? Certainly clause2inv, today's RG paper, does not mention Daikon.}
 but its design imposes a hard expressive ceiling:
 it generates candidates from a fixed template library,
 so any invariant that cannot be expressed within that grammar
@@ -59,7 +59,7 @@ real programs frequently contain semantic constraints
 that cut across these boundaries.
 Prior work has extended Daikon with new template families~\cite{le2019sling},
 but adding templates does not solve the expressiveness problem in general:
-Daikon's runtime cost scales with the number of candidates,
+Daikon's run-time cost scales with the number of candidates,
 so template libraries must remain small and fixed.
 
 Recent work has begun to explore LLMs as a source of invariant candidates~\cite{endres2024llm,pei2023llm,cao2025clause2inv,ma2025specgen,sun2025classinvgen},
